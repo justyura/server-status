@@ -105,7 +105,10 @@ export interface ProbeReturnRoute {
 
 export interface ProbePayload {
   enabled: boolean
+  block_login?: boolean
+  show_name?: boolean
   show_globe?: boolean
+  show_forward?: boolean
   show_daily_trend?: boolean
   show_traffic_hotspots?: boolean
   show_traffic_7d?: boolean

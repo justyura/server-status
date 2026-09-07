@@ -218,6 +218,23 @@ async function directUpstream(request: Request, env: Env, target: URL): Promise<
   }))
 }
 
+async function shouldBlockOriginLogin(request: Request, env: Env): Promise<boolean> {
+  if (!env.PROBE_TOKEN) return true
+  try {
+    const response = await directUpstream(
+      request,
+      env,
+      originURL(env, '/api/public/probe-servers'),
+    )
+    if (!response.ok) return true
+    const payload = await response.json() as { block_login?: boolean }
+    return payload.block_login === true
+  } catch {
+    // 无法确认开关状态时不暴露主控登录页。
+    return true
+  }
+}
+
 /**
  * 全局 ProbeHub：无论 Worker 有多少访问域名或边缘节点，固定名称都映射到同一个
  * Durable Object。所有浏览器共享同一个定时快照采集器。
@@ -533,6 +550,12 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const incoming = new URL(request.url)
     if (incoming.pathname === '/login') {
+      if (request.method !== 'GET' && request.method !== 'HEAD') {
+        return new Response('Method not allowed', { status: 405 })
+      }
+      if (await shouldBlockOriginLogin(request, env)) {
+        return Response.redirect(new URL('/', incoming).toString(), 302)
+      }
       return Response.redirect(new URL('/login', env.MMWX_ORIGIN).toString(), 302)
     }
 

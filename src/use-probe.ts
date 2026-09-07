@@ -148,6 +148,19 @@ function enrichPayload(payload: ProbePayload): ProbePayload {
   return { ...payload, servers: mergeDailyTraffic(payload.servers, next) }
 }
 
+// 主控关闭“显示服务器名称”时，旧版接口仍可能带 name。展示层统一替换为
+// 稳定的序号名称；历史合并已在此之前按真实名称完成，不会污染内部缓存。
+function applyPayloadVisibility(payload: ProbePayload): ProbePayload {
+  if (payload.show_name !== false || !payload.servers?.length) return payload
+  return {
+    ...payload,
+    servers: payload.servers.map((server, index) => ({
+      ...server,
+      name: `服务器 ${index + 1}`,
+    })),
+  }
+}
+
 function normalizeTheme(value?: string): ThemeName {
   return value === 'anime' || value === 'flat' || value === 'glass' || value === 'lumina' ? value : 'pixel'
 }
@@ -374,7 +387,7 @@ function useProbeConnection(): ProbeState {
       if (stopped) return
       applyAppearance(payload.appearance)
       applyFavicon(payload.icon)
-      setData(enrichPayload(payload))
+      setData(applyPayloadVisibility(enrichPayload(payload)))
       setError(undefined)
       if (payload.title) document.title = payload.title
     }

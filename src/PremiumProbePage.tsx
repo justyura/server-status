@@ -1493,9 +1493,11 @@ function forwardLatencyClass(ms: number): string {
 function ForwardModeToggle({
   mode,
   onChange,
+  showForward,
 }: {
   mode: "server" | "forward";
   onChange: (next: "server" | "forward") => void;
+  showForward: boolean;
 }) {
   return (
     <div
@@ -1512,15 +1514,17 @@ function ForwardModeToggle({
         <Server />
         <span>按服务器</span>
       </button>
-      <button
-        type="button"
-        className={mode === "forward" ? "is-active" : undefined}
-        aria-pressed={mode === "forward"}
-        onClick={() => onChange("forward")}
-      >
-        <Radio />
-        <span>转发链</span>
-      </button>
+      {showForward && (
+        <button
+          type="button"
+          className={mode === "forward" ? "is-active" : undefined}
+          aria-pressed={mode === "forward"}
+          onClick={() => onChange("forward")}
+        >
+          <Radio />
+          <span>转发链</span>
+        </button>
+      )}
     </div>
   );
 }
@@ -1963,15 +1967,20 @@ function ForwardChainView({ wsChains }: { wsChains?: ForwardChainData[] }) {
 function PremiumNetworkView({
   servers,
   forwardChains,
+  showForward,
 }: {
   servers: ProbeServer[]
   forwardChains?: ForwardChainData[]
+  showForward: boolean
 }) {
   const [netMode, setNetMode] = useState<'server' | 'forward'>('server')
   const [serverIndex, setServerIndex] = useState(0)
   const [target, setTarget] = useState('__all__')
   const [visibleTargets, setVisibleTargets] = useState<string[]>([])
   const [range, setRange] = useState<'1h' | '6h' | '24h'>('1h')
+  useEffect(() => {
+    if (!showForward && netMode === 'forward') setNetMode('server')
+  }, [netMode, showForward])
   const selectedServerIndex = Math.min(
     serverIndex,
     Math.max(0, servers.length - 1)
@@ -2107,7 +2116,7 @@ function PremiumNetworkView({
       })
     : []
 
-  if (netMode === 'forward') {
+  if (showForward && netMode === 'forward') {
     return (
       <section className='premium-probe-network-view'>
         <div className='premium-probe-network-view-heading'>
@@ -2117,7 +2126,7 @@ function PremiumNetworkView({
             </h2>
             <span>按转发链查看入口到出口的端到端探测、逐组延迟与流量</span>
           </div>
-          <ForwardModeToggle mode={netMode} onChange={setNetMode} />
+          <ForwardModeToggle mode={netMode} onChange={setNetMode} showForward={showForward} />
         </div>
         <ForwardChainView wsChains={forwardChains} />
       </section>
@@ -2180,7 +2189,7 @@ function PremiumNetworkView({
               ))}
             </select>
           </label>
-          <ForwardModeToggle mode={netMode} onChange={setNetMode} />
+          <ForwardModeToggle mode={netMode} onChange={setNetMode} showForward={showForward} />
         </div>
       </div>
 
@@ -3244,7 +3253,11 @@ export function PremiumProbePage({
 
       <main>
         {view === 'network' ? (
-          <PremiumNetworkView servers={servers} forwardChains={data?.forward} />
+          <PremiumNetworkView
+            servers={servers}
+            forwardChains={data?.forward}
+            showForward={data?.show_forward !== false}
+          />
         ) : view === 'resource' ? (
           <PremiumResourceOverview
             servers={servers}
