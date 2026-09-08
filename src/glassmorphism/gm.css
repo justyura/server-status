@@ -173,13 +173,13 @@
   padding: 12px;
   border-radius: 10px;
   border: 1px solid transparent;
-  background: rgba(17, 24, 39, 0.5);
+  background: rgba(17, 24, 39, 0.86);
   transition: background 0.15s ease, border-color 0.15s ease;
   overflow: hidden;
   min-height: 96px;
 }
 .gm-general-card:hover {
-  background: rgba(17, 24, 39, 0.9);
+  background: rgba(17, 24, 39, 0.96);
   border-color: rgba(255, 255, 255, 0.14);
 }
 .gm-general-card-top {
@@ -470,7 +470,7 @@
   flex-direction: column;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(17, 24, 39, 0.9);
+  background: rgba(17, 24, 39, 0.94);
   box-shadow: rgba(0, 0, 0, 0.42) 0px 8px 26px 0px;
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -762,7 +762,7 @@
 .gm-table-wrap {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 14px;
-  background: rgba(17, 24, 39, 0.9);
+  background: rgba(17, 24, 39, 0.94);
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.42) 0px 8px 26px 0px;
 }
@@ -1245,11 +1245,11 @@ body.gm-body .modal header button:hover {
 .gm-app.gm-light .gm-theme-dropdown button:hover { background: rgba(16, 185, 129, 0.1); color: #10141f; }
 /* 总览卡 */
 .gm-app.gm-light .gm-general-card {
-  background: rgba(250, 251, 253, 0.5);
+  background: rgba(250, 251, 253, 0.88);
   border-color: transparent;
 }
 .gm-app.gm-light .gm-general-card:hover {
-  background: rgba(250, 251, 253, 0.92);
+  background: rgba(250, 251, 253, 0.98);
   border-color: rgba(15, 23, 42, 0.12);
 }
 .gm-app.gm-light .gm-general-card-label { color: #3f4a63; }
@@ -1286,7 +1286,7 @@ body.gm-body .modal header button:hover {
 .gm-app.gm-light .gm-view-switch button.active { background: rgba(15, 23, 42, 0.06); color: #0d946e; }
 /* 节点卡 */
 .gm-app.gm-light .gm-node-card {
-  background: rgba(250, 251, 253, 0.9);
+  background: rgba(250, 251, 253, 0.95);
   border-color: rgba(15, 23, 42, 0.12);
   box-shadow: rgba(15, 23, 42, 0.08) 0px 8px 26px 0px;
 }
@@ -1312,7 +1312,7 @@ body.gm-body .modal header button:hover {
 .gm-app.gm-light .gm-node-card.is-offline .gm-metric-value { color: #8b95ab; }
 /* 列表视图 */
 .gm-app.gm-light .gm-table-wrap {
-  background: rgba(250, 251, 253, 0.9);
+  background: rgba(250, 251, 253, 0.95);
   border-color: rgba(15, 23, 42, 0.12);
   box-shadow: rgba(15, 23, 42, 0.08) 0px 8px 26px 0px;
 }
