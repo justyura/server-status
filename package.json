@@ -1,8 +1,8 @@
 {
-  "name": "wtyura-probe",
+  "name": "server-status",
   "private": true,
   "version": "0.1.0",
-  "description": "Self-hosted server status frontend for Wtyura",
+  "description": "Fully self-hosted server status frontend",
   "cloudflare": {
     "bindings": {
       "MMWX_ORIGIN": {

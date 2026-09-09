@@ -609,7 +609,7 @@ export default function GmApp({
   onThemeChange: (name: ThemeName | null) => void
 }) {
   const servers = useMemo(() => (data.servers || []) as EnrichedServer[], [data.servers])
-  const title = data.title?.trim() || '服务器状态'
+  const title = data.title?.trim() || 'Server Status'
   const [search, setSearch] = useState('')
   const [view, setView] = useState<'card' | 'list'>(() => (localStorage.getItem('probe-view') === 'list' ? 'list' : 'card'))
   const [detailIndex, setDetailIndex] = useState<number | null>(null)
@@ -827,18 +827,6 @@ export default function GmApp({
           <div className="gm-empty">暂无符合条件的服务器</div>
         )}
       </main>
-
-      <footer className="gm-footer">
-        <div>
-          Powered by{' '}
-          <a href="https://github.com/mmwx-group" target="_blank" rel="noreferrer">
-            <strong>妙妙屋</strong>
-          </a>
-        </div>
-        <div>
-          Theme by <strong>Glassmorphism</strong>
-        </div>
-      </footer>
 
       <GmVisitorBar />
 

@@ -1,20 +1,21 @@
-# Wtyura Probe
+# Server Status
 
-`Wtyura Probe` 是部署在 `gold2` 上的自托管服务器状态站，基于 Jiwo Probe 修改。
+`Server Status` 是部署在 `gold2` 上的自托管服务器状态站，基于
+[`chnnic/jiwo-probe`](https://github.com/chnnic/jiwo-probe) 修改。
 前端、共享快照缓存、WebSocket 广播和 API 代理均运行在自己的服务器上，不依赖
 Cloudflare Workers 或 Durable Objects。访问路径为 `https://mmw.wtyura.com/probe/`。
 
 本修改版保持公开源码，保留原项目许可证与版权声明；它是非官方、非商业部署。
-原始 Jiwo Probe 的 Cloudflare 部署方式仍保留在下文，方便对照与上游同步。
+上游的 Cloudflare 部署方式仍保留在下文，方便对照与同步。
 
 ## 自托管架构
 
 ```text
-浏览器 ──HTTPS/WS──> Caddy ──> Wtyura Probe Hub ──每 3 秒一次──> 本机 MMWX
+浏览器 ──HTTPS/WS──> Caddy ──> Server Status Hub ──每 3 秒一次──> 本机 MMWX
 ```
 
 自托管服务位于 `selfhost/`，使用 Go 编译为单文件程序。密钥通过 root-only 的
-`/etc/wtyura-probe.env` 注入，不进入前端、Git 仓库或日志。
+`/etc/server-status.env` 注入，不进入前端、Git 仓库或日志。
 
 主要端点：
 

@@ -2554,8 +2554,6 @@ function ProbeLicenseNameplate({ name, displayName }: { name?: string; displayNa
 // 主控端仅支持单个许可证，这里补充展示其它已获得的许可证铭牌（按 name 去重合并）。
 // 数组顺序即页面展示顺序。
 // 注意：此数组为本地部署专属（私有勋章），推送到 GitHub 时由 git clean filter 自动剥离。
-import { EXTRA_LICENSE_BADGES } from './license-badges'
-
 export function App() {
   const { data, error } = useProbe()
   const servers = data?.servers || []
@@ -2690,7 +2688,7 @@ export function App() {
       </Suspense>
     )
   }
-  const title = data.title?.trim() || '服务器状态'
+  const title = data.title?.trim() || 'Server Status'
   const onlineCount = servers.filter((server) => server.online).length
   const expiringCount = servers.filter(expiring).length
   const expiredCount = servers.filter(expired).length
@@ -2712,7 +2710,7 @@ export function App() {
   const totalUpload = servers.reduce((sum, server) => sum + (server.upload_speed || 0), 0)
   const totalDownload = servers.reduce((sum, server) => sum + (server.download_speed || 0), 0)
   return (
-    <div className={data.license_badge ? 'app-shell has-license-footer' : 'app-shell'}>
+    <div className="app-shell">
       <header className="topbar">
         <div>
           {data.logo && <img src={data.logo} alt="" />}
@@ -2897,27 +2895,6 @@ export function App() {
         </div>
       </section>
       <main className={`servers ${view}`}>{visible.length ? view === 'card' ? visible.map((server) => activeTheme === 'lumina' ? <ServerCardLumina key={server.name} server={server} index={servers.indexOf(server)} /> : <ServerCard key={server.name} server={server} index={servers.indexOf(server)} />) : view === 'mini' ? visible.map((server) => <ServerMiniCard key={server.name} server={server} index={servers.indexOf(server)} expanded={miniExpanded} />) : <ServerTable servers={visible} /> : <div className="empty">暂无符合条件的服务器</div>}</main>
-      <footer>
-        Powered by{' '}
-        <a href="https://github.com/mmwx-group" target="_blank" rel="noreferrer">
-          MMWX Group
-        </a>
-      </footer>
-      {(data.license_badge || EXTRA_LICENSE_BADGES.length > 0) && (
-        <div className="probe-license-footer">
-          {(() => {
-            const live = data.license_badge ? (Array.isArray(data.license_badge) ? data.license_badge : [data.license_badge]) : []
-            const keyOf = (badge: { name?: string; display_name?: string }) => badge.name || badge.display_name || ''
-            const merged = EXTRA_LICENSE_BADGES.map((badge) => live.find((item) => keyOf(item) === keyOf(badge)) || badge)
-            const extras = live.filter((badge) => !EXTRA_LICENSE_BADGES.some((item) => keyOf(item) === keyOf(badge)))
-            return [...merged, ...extras]
-              .filter((badge, index, all) => all.findIndex((item) => keyOf(item) === keyOf(badge)) === index)
-              .map((badge, index) => (
-                <ProbeLicenseNameplate key={index} name={badge.name} displayName={badge.display_name} />
-              ))
-          })()}
-        </div>
-      )}
       {detailIndex !== null && servers[detailIndex] && (
         <ServerDetail
           server={servers[detailIndex]}

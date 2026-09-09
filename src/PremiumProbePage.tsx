@@ -15,7 +15,6 @@ import {
   Radio,
   Server,
   ShieldCheck,
-  Sparkles,
   SunMoon,
   Target,
   X,
@@ -32,7 +31,7 @@ import type {
 } from './types'
 import { Twemoji } from './Twemoji'
 import { parseThemeName } from './use-probe'
-import { EXTRA_LICENSE_BADGES, HEADER_LICENSE_BADGES } from './license-badges'
+import { HEADER_LICENSE_BADGES } from './license-badges'
 import { FLAG_OPTIONS } from './country-flag'
 import { displayServerName } from './server-name'
 import {
@@ -3065,11 +3064,6 @@ export function PremiumProbePage({
     manualColorRef.current = true
     setColorMode((prev) => (prev === 'auto' ? 'platinum' : prev === 'platinum' ? 'dark' : 'auto'))
   }
-  // 底部许可证动画开关（默认开，localStorage 记忆）
-  const [licenseAnim, setLicenseAnim] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true
-    return localStorage.getItem('premium-probe-license-anim') !== '0'
-  })
   // 页首许可证循环播放索引（本地 11 枚轮播; GitHub 版空数组时回退主控 badge）
   const [headerBadgeIdx, setHeaderBadgeIdx] = useState(0)
   useEffect(() => {
@@ -3165,14 +3159,7 @@ export function PremiumProbePage({
       return next
     })
   }
-  const toggleLicenseAnim = () => {
-    setLicenseAnim((prev) => {
-      const next = !prev
-      localStorage.setItem('premium-probe-license-anim', next ? '1' : '0')
-      return next
-    })
-  }
-  const pageTitle = data?.title?.trim() || '服务器状态'
+  const pageTitle = data?.title?.trim() || 'Server Status'
   const logo = data?.logo?.trim() || ''
 
   return (
@@ -3469,29 +3456,6 @@ export function PremiumProbePage({
         />
       )}
 
-      <footer className='premium-probe-footer'>
-        <div className='premium-probe-footer-badges'>
-          {(() => {
-            // 与经典界面 Footer 同款去重: 本地 EXTRA 为主, 主控同名勋章覆盖, 其余主控勋章追加
-            const live = data?.license_badge ? (Array.isArray(data.license_badge) ? data.license_badge : [data.license_badge]) : []
-            const keyOf = (badge: { name?: string; display_name?: string }) => badge.name || badge.display_name || ''
-            const merged = EXTRA_LICENSE_BADGES.map((badge) => live.find((item) => keyOf(item) === keyOf(badge)) || badge)
-            const extras = live.filter((badge) => !EXTRA_LICENSE_BADGES.some((item) => keyOf(item) === keyOf(badge)))
-            const list = [...merged, ...extras].filter((badge, index, all) => all.findIndex((item) => keyOf(item) === keyOf(badge)) === index)
-            return list.map((badge, index) => <StandaloneLicenseBadge key={index} badge={badge} animated={licenseAnim} />)
-          })()}
-        </div>
-        <button
-          type='button'
-          className={`premium-probe-login premium-probe-license-anim-toggle${licenseAnim ? ' is-on' : ''}`}
-          aria-label={licenseAnim ? '关闭底部许可证动画' : '开启底部许可证动画'}
-          aria-pressed={licenseAnim}
-          title={licenseAnim ? '关闭底部许可证动画' : '开启底部许可证动画'}
-          onClick={toggleLicenseAnim}
-        >
-          <Sparkles />
-        </button>
-      </footer>
     </div>
   )
 }

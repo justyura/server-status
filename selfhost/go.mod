@@ -1,4 +1,4 @@
-module github.com/justyura/jiwo-probe/selfhost
+module github.com/justyura/server-status/selfhost
 
 go 1.23
 

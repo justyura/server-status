@@ -138,7 +138,7 @@ func main() {
 		IdleTimeout:       90 * time.Second,
 	}
 	go func() {
-		log.Printf("Wtyura Probe listening on %s, serving %s", cfg.listen, cfg.staticDir)
+		log.Printf("Server Status listening on %s, serving %s", cfg.listen, cfg.staticDir)
 		if err := httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err)
 		}
@@ -414,5 +414,5 @@ func (s *server) assets(w http.ResponseWriter, r *http.Request) {
 
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.LUTC | log.Lmsgprefix)
-	log.SetPrefix("wtyura-probe: ")
+	log.SetPrefix("server-status: ")
 }

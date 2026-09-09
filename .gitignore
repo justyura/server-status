@@ -11,4 +11,5 @@ wrangler.local.jsonc
 .env.kv
 .wrangler-deploy.jsonc
 HANDOVER.md
+server-status-linux-*
 wtyura-probe-linux-*

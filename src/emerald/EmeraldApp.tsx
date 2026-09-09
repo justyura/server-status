@@ -663,7 +663,7 @@ export default function EmeraldApp({ data, onThemeChange }: { data: ProbePayload
   })
 
   const isDark = colorMode === 'dark' || (colorMode === 'auto' && document.documentElement.classList.contains('dark'))
-  const title = data.title?.trim() || '服务器状态'
+  const title = data.title?.trim() || 'Server Status'
 
   useEffect(() => {
     document.body.classList.add('emerald-body')
