@@ -591,6 +591,8 @@ function renewalTimelineRows(servers: ProbeServer[]) {
         days,
         price,
         monthlyPrice: price === undefined ? undefined : price / cycleMonths,
+        providerName: server.provider_name,
+        providerUrl: server.provider_url,
       }
     })
     .filter((item): item is NonNullable<typeof item> => !!item)
@@ -603,7 +605,13 @@ function RenewalTimeline({
   rows: ReturnType<typeof renewalTimelineRows>
 }) {
   const trackRef = useRef<HTMLDivElement>(null)
-  const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 })
+  // 区分点击与拖动，避免横向拖动时间轴后误开服务商网站。
+  const dragRef = useRef({
+    active: false,
+    startX: 0,
+    scrollLeft: 0,
+    moved: false,
+  })
   const currentMonth = new Date().toISOString().slice(0, 7)
   const monthlyTotal = rows.reduce(
     (total, item) => total + (item.monthlyPrice || 0),
@@ -639,15 +647,16 @@ function RenewalTimeline({
               active: true,
               startX: event.clientX,
               scrollLeft: track.scrollLeft,
+              moved: false,
             }
             track.setPointerCapture(event.pointerId)
           }}
           onPointerMove={(event) => {
             const track = trackRef.current
             if (!track || !dragRef.current.active) return
-            track.scrollLeft =
-              dragRef.current.scrollLeft -
-              (event.clientX - dragRef.current.startX)
+            const dx = event.clientX - dragRef.current.startX
+            if (Math.abs(dx) > 4) dragRef.current.moved = true
+            track.scrollLeft = dragRef.current.scrollLeft - dx
           }}
           onPointerUp={() => {
             dragRef.current.active = false
@@ -657,34 +666,57 @@ function RenewalTimeline({
           }}
         >
           <div className='premium-probe-renewal-track'>
-            {rows.map((item) => (
-              <div
-                key={item.index}
-                className={
-                  item.days < 0
-                    ? 'is-expired'
-                    : item.days <= 30
-                      ? 'is-due'
-                      : undefined
-                }
-              >
-                <time>{item.expiresAt}</time>
-                <i />
-                <Twemoji className='premium-probe-server-name'>
-                  {item.name}
-                </Twemoji>
-                <strong>
-                  {item.days < 0
-                    ? `已过期 ${Math.abs(item.days)} 天`
-                    : item.days === 0
-                      ? '今天到期'
-                      : `${item.days} 天后`}
-                </strong>
-                {item.price !== undefined && (
-                  <small>¥{item.price.toFixed(2)}</small>
-                )}
-              </div>
-            ))}
+            {rows.map((item) => {
+              const tone =
+                item.days < 0
+                  ? 'is-expired'
+                  : item.days <= 30
+                    ? 'is-due'
+                    : undefined
+              const inner = (
+                <>
+                  <time>{item.expiresAt}</time>
+                  <i />
+                  <Twemoji className='premium-probe-server-name'>
+                    {item.name}
+                  </Twemoji>
+                  <strong>
+                    {item.days < 0
+                      ? `已过期 ${Math.abs(item.days)} 天`
+                      : item.days === 0
+                        ? '今天到期'
+                        : `${item.days} 天后`}
+                  </strong>
+                  {item.price !== undefined && (
+                    <small>¥{item.price.toFixed(2)}</small>
+                  )}
+                </>
+              )
+
+              if (!item.providerUrl) {
+                return (
+                  <div key={item.index} className={tone}>
+                    {inner}
+                  </div>
+                )
+              }
+
+              return (
+                <a
+                  key={item.index}
+                  className={[tone, 'is-linked'].filter(Boolean).join(' ')}
+                  href={item.providerUrl}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  title={`前往 ${item.providerName || '服务商'} 续费`}
+                  onClick={(event) => {
+                    if (dragRef.current.moved) event.preventDefault()
+                  }}
+                >
+                  {inner}
+                </a>
+              )
+            })}
           </div>
         </div>
       )}

@@ -2555,7 +2555,8 @@
   );
 }
 
-.premium-probe-renewal-track > div {
+.premium-probe-renewal-track > div,
+.premium-probe-renewal-track > a {
   position: relative;
   display: grid;
   width: 178px;
@@ -2565,7 +2566,8 @@
   padding: 0 0.5rem;
 }
 
-.premium-probe-renewal-track > div > i {
+.premium-probe-renewal-track > div > i,
+.premium-probe-renewal-track > a > i {
   z-index: 1;
   width: 0.56rem;
   height: 0.56rem;
@@ -2614,6 +2616,24 @@
 
 .premium-probe-renewal-track small {
   color: #b29b68;
+}
+
+.premium-probe-renewal-track > a.is-linked {
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.premium-probe-renewal-track > a.is-linked:hover {
+  border-color: var(--pp-gold, #d7a63d);
+  transform: translateY(-1px);
+}
+
+.premium-probe-renewal-track > a.is-linked:focus-visible {
+  outline: 2px solid var(--pp-gold, #d7a63d);
+  outline-offset: 2px;
 }
 
 .premium-probe-insights-empty {
@@ -3767,7 +3787,8 @@
 :root.theme-premium.platinum .premium-probe-insight-card > header > span i,
 :root.theme-premium.platinum .premium-probe-network-ranges button.is-active,
 :root.theme-premium.platinum .premium-probe-network-view-heading select option:checked,
-:root.theme-premium.platinum .premium-probe-renewal-track > div > i {
+:root.theme-premium.platinum .premium-probe-renewal-track > div > i,
+:root.theme-premium.platinum .premium-probe-renewal-track > a > i {
   background: #a87c22;
 }
 :root.theme-premium.platinum .premium-probe-filters,
@@ -4043,10 +4064,12 @@
     transparent
   );
 }
-:root.theme-premium.platinum .premium-probe-renewal-track > div > i {
+:root.theme-premium.platinum .premium-probe-renewal-track > div > i,
+:root.theme-premium.platinum .premium-probe-renewal-track > a > i {
   border: 2px solid rgba(255, 253, 248, 1.00);
 }
-:root.theme-premium.platinum .premium-probe-renewal-track > div > i {
+:root.theme-premium.platinum .premium-probe-renewal-track > div > i,
+:root.theme-premium.platinum .premium-probe-renewal-track > a > i {
   box-shadow: 0 0 0 1px rgba(168, 124, 34, 0.55);
 }
 :root.theme-premium.platinum .premium-probe-server-card:hover {
