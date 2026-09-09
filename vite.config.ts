@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
+  base: '/probe/',
   plugins: [react()],
   build: {
     rollupOptions: {

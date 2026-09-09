@@ -1,0 +1,21 @@
+[Unit]
+Description=Wtyura Probe self-hosted status frontend
+After=network-online.target mmwx.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+EnvironmentFile=/etc/wtyura-probe.env
+ExecStart=/usr/local/bin/wtyura-probe
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/opt/wtyura-probe
+
+[Install]
+WantedBy=multi-user.target

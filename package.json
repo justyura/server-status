@@ -1,8 +1,8 @@
 {
-  "name": "mmwx-probe",
+  "name": "wtyura-probe",
   "private": true,
   "version": "0.1.0",
-  "description": "Standalone Cloudflare Worker probe frontend for MiaoMiaoWuX",
+  "description": "Self-hosted server status frontend for Wtyura",
   "cloudflare": {
     "bindings": {
       "MMWX_ORIGIN": {

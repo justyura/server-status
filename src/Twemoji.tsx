@@ -14,7 +14,7 @@ export const Twemoji = memo(function Twemoji({
     twemoji.parse(element, {
       folder: 'svg',
       ext: '.svg',
-      base: '/twemoji/',
+      base: '/probe/twemoji/',
     })
     return element.innerHTML
   }, [children])

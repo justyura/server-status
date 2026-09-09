@@ -1,0 +1,9 @@
+	# Wtyura Probe self-hosted frontend and API hub.
+	redir /probe /probe/ 308
+	handle_path /probe/* {
+		reverse_proxy 127.0.0.1:12890
+	}
+	@wtyura_probe_api path /api/probe /api/series /api/stream /api/theme-config /api/visitor
+	handle @wtyura_probe_api {
+		reverse_proxy 127.0.0.1:12890
+	}

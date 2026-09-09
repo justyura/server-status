@@ -1,4 +1,30 @@
-# Jiwo Probe（鸡窝状态站）
+# Wtyura Probe
+
+`Wtyura Probe` 是部署在 `gold2` 上的自托管服务器状态站，基于 Jiwo Probe 修改。
+前端、共享快照缓存、WebSocket 广播和 API 代理均运行在自己的服务器上，不依赖
+Cloudflare Workers 或 Durable Objects。访问路径为 `https://mmw.wtyura.com/probe/`。
+
+本修改版保持公开源码，保留原项目许可证与版权声明；它是非官方、非商业部署。
+原始 Jiwo Probe 的 Cloudflare 部署方式仍保留在下文，方便对照与上游同步。
+
+## 自托管架构
+
+```text
+浏览器 ──HTTPS/WS──> Caddy ──> Wtyura Probe Hub ──每 3 秒一次──> 本机 MMWX
+```
+
+自托管服务位于 `selfhost/`，使用 Go 编译为单文件程序。密钥通过 root-only 的
+`/etc/wtyura-probe.env` 注入，不进入前端、Git 仓库或日志。
+
+主要端点：
+
+- `/api/probe`：共享的最新主控快照
+- `/api/stream`：向所有浏览器广播同一份实时快照
+- `/api/series`：历史指标代理
+- `/api/visitor`：从反向代理请求头读取访客 IP，不调用第三方服务
+- `/probe/`：生产前端静态文件
+
+## 上游项目说明
 
 妙妙屋 X（MiaoMiaoWuX）独立服务器探针的**非官方魔改 fork**，基于 [mmwx-probe](https://github.com/mmwx-group/mmwx-probe)（功能基线 `d706d7e`，2026-08-22；最新转发链 WS 数据、固定切换位置、浅色修复和每日流量堆叠柱状图已按本 fork 架构移植）。
 
